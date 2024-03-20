@@ -276,11 +276,11 @@ function Tick()
   ];
 
   uMVMatrix = MatrixMul(uMVMatrix,uMVRotX);
-  uMVMatrix = MatrixMul(uMVMatrix,uMVRotY);
+  uPMatrix = MatrixMul(uMVRotX,uPMatrix);
   uMVMatrix = MatrixMul(uMVMatrix,uMVRotZ);
   uMVMatrix = MatrixMul(uMVMatrix,uMVTranslateZ);
   //alert(uPMatrix);
-  
+  angleX = 0.0;
   //Render Scene
   gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight); 
   gl.clearColor(1.0,0.0,0.0,1.0); //Wyczyszczenie obrazu kolorem czerwonym
