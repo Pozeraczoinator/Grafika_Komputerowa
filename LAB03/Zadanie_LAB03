@@ -84,8 +84,11 @@ function startGL()
   //Opis sceny 3D, położenie punktów w przestrzeni 3D w formacie X,Y,Z 
   let vertexPosition = [
   //maze path
-  -10.0,2.0,0.0,  -10.0,1.0,0.0,  -6.0,2.0,0.0,
-    -10.0,1.0,0.0,  -6.0,1.0,0.0,   -6.0,2.0,0.0,
+    -13.0,2.0,0.0,  -13.0,1.0,0.0,  -7.0,2.0,0.0,
+    -13.0,1.0,0.0,  -7.0,1.0,0.0,   -7.0,2.0,0.0,
+
+    -12.0,2.0,0.0,  -12.0,1.0,0.0,  -6.0,2.0,0.0,
+    -12.0,1.0,0.0,  -6.0,1.0,0.0,   -6.0,2.0,0.0,
 
     -7.0,1.0,0.0,   -6.0,1.0,0.0,   -6.0,-1.0,0.0,
     -7.0,1.0,0.0,   -7.0,-1.0,0.0,  -6.0,-1.0,0.0,
@@ -147,6 +150,9 @@ function startGL()
     9.0,-1.0,0.0,   10.0,-1.0,0.0,  10.0,-1.5,0.0,
     10.0,-1.5,0.0,  9.0,-1.5,0.0,   9.0,-1.0,0.0,
 
+    10.0,-1.0,0.0,   11.0,-1.0,0.0,  11.0,-1.5,0.0,
+    11.0,-1.5,0.0,  10.0,-1.5,0.0,   10.0,-1.0,0.0,
+
   ]
 
   
@@ -154,9 +160,11 @@ function startGL()
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPosition), gl.STATIC_DRAW);
   vertexPositionBuffer.itemSize = 3; //zdefiniowanie liczby współrzednych per wierzchołek
-  vertexPositionBuffer.numItems = 42; //Zdefinoiowanie liczby punktów w naszym buforze
+  vertexPositionBuffer.numItems = 44; //Zdefinoiowanie liczby punktów w naszym buforze
   
   let vertexColor = [
+    1.0, 0.0, 0.0, 1.0, 0.0, 0.0,  1.0, 0.0, 0.0, 
+    1.0, 0.0, 0.0, 1.0, 0.0, 0.0,  1.0, 0.0, 0.0, 
     0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
     0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
     0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
@@ -207,15 +215,17 @@ function startGL()
     0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
     0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
 
-    0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8,  
-    0.5, 0.7, 0.8, 0.5, 0.7, 0.8,  0.5, 0.7, 0.8, 
+    0.0, 1.0, 0.0, 0.0, 1.0, 0.0,  0.0, 1.0, 0.0, 
+    0.0, 1.0, 0.0, 0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  
+    0.0, 1.0, 0.0, 0.0, 1.0, 0.0,  0.0, 1.0, 0.0, 
+    0.0, 1.0, 0.0, 0.0, 1.0, 0.0,  0.0, 1.0, 0.0,  
 
 ]
   vertexColorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColor), gl.STATIC_DRAW);
   vertexColorBuffer.itemSize = 3;
-  vertexColorBuffer.numItems = 42;
+  vertexColorBuffer.numItems = 44;
   
   
   //Macierze opisujące położenie wirtualnej kamery w przestrzenie 3D
@@ -237,6 +247,8 @@ var angleZ = 0.0;
 var angleY = 0.0;
 var angleX = 0.0;
 var tz = -5.0;
+var ty = -2.0;
+var tx = 10.0;
 
 function Tick()
 {  
@@ -275,15 +287,36 @@ function Tick()
   0,0,tz,1
   ];
 
-  uMVMatrix = MatrixMul(uMVMatrix,uMVRotX);
+  let uMVTranslateY = [
+  1,0,0,0,
+  0,1,0,0,
+  0,0,1,0,
+  0,ty,0,1
+  ];
+
+  let uMVTranslateX = [
+  1,0,0,0,
+  0,1,0,0,
+  0,0,1,0,
+  tx,0,0,1
+  ];
+
+  uMVMatrix = MatrixMul(uMVMatrix,uMVTranslateY);
   uPMatrix = MatrixMul(uMVRotX,uPMatrix);
+  uPMatrix = MatrixMul(uMVRotY,uPMatrix);
+  uPMatrix = MatrixMul(uMVRotZ,uPMatrix);
+  uMVMatrix = MatrixMul(uMVMatrix,uMVTranslateX);
   uMVMatrix = MatrixMul(uMVMatrix,uMVRotZ);
   uMVMatrix = MatrixMul(uMVMatrix,uMVTranslateZ);
+
+
   //alert(uPMatrix);
+  angleY = 0.0;
   angleX = 0.0;
+  angleZ = 0.0;
   //Render Scene
   gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight); 
-  gl.clearColor(1.0,0.0,0.0,1.0); //Wyczyszczenie obrazu kolorem czerwonym
+  gl.clearColor(0.2,0.5,0.1,1.0); //Wyczyszczenie obrazu kolorem czerwonym
   gl.clearDepth(1.0);             //Wyczyścienie bufora głebi najdalszym planem
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.useProgram(shaderProgram)   //Użycie przygotowanego programu shaderowego
@@ -308,18 +341,25 @@ function Tick()
 }
 function handlekeydown(e)
 {
- if(e.keyCode==87) angleX=angleX+1.0; //W
+ /*if(e.keyCode==87) angleX=angleX+1.0; //W
  if(e.keyCode==83) angleX=angleX-1.0; //S
  if(e.keyCode==68) angleY=angleY+1.0;
  if(e.keyCode==65) angleY=angleY-1.0;
  if(e.keyCode==81) angleZ=angleZ+1.0;
- if(e.keyCode==69) angleZ=angleZ-1.0;
+ if(e.keyCode==69) angleZ=angleZ-1.0;*/
+
+ if(e.keyCode==38) ty=ty-0.05; 
+ if(e.keyCode==40) ty=ty+0.05;
+
+ if(e.keyCode==37) tx=tx+0.05;
+ if(e.keyCode==39) tx=tx-0.05;
+ 
  //alert(e.keyCode);
  //alert(angleX);
 }
 </script>
 </head>
 <body onload="startGL()" onkeydown="handlekeydown(event)">
-<canvas id="canvas3D" width="640" height="480" style="border: solid black 1px"></canvas>
+<canvas id="canvas3D" width="1280" height="720" style="border: solid black 1px"></canvas>
 </body>
 </html>
