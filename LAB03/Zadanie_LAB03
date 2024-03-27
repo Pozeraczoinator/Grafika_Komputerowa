@@ -8,6 +8,11 @@ var uPMatrix;
 var vertexPositionBuffer;
 var vertexColorBuffer;
 
+
+//----------------------------------------------
+// Plik w GitHub o ścieżce: Grafika_Komputerowa->LAB03->Zadanie_LAB03
+//----------------------------------------------
+
 function MatrixMul(a,b) //Mnożenie macierzy
 {
   c = [
@@ -348,11 +353,11 @@ function handlekeydown(e)
  if(e.keyCode==81) angleZ=angleZ+1.0;
  if(e.keyCode==69) angleZ=angleZ-1.0;*/
 
- if(e.keyCode==38) ty=ty-0.05; 
- if(e.keyCode==40) ty=ty+0.05;
+ if(e.keyCode==73) ty=ty-0.05; 
+ if(e.keyCode==75) ty=ty+0.05;
 
- if(e.keyCode==37) tx=tx+0.05;
- if(e.keyCode==39) tx=tx-0.05;
+ if(e.keyCode==74) tx=tx+0.05;
+ if(e.keyCode==76) tx=tx-0.05;
  
  //alert(e.keyCode);
  //alert(angleX);
